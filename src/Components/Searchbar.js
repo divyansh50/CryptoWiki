@@ -3,26 +3,20 @@ import axios from 'axios'
 import CoinData from './CoinInfo'
 import Loading from './Load'
 
-export default class Searchbar extends Component 
-{
+export default class Searchbar extends Component {
   
     state = {
         currency: '',
-        
         loading: false,
-        
         showData: false,
-        
         coins: {},
-        
         searchedCoin: {}
     }
 
     componentDidMount(){
         axios.get("https://api.coingecko.com/api/v3/coins/list")
-            
             .then(res => {
-                    this.setState({
+                this.setState({
                     loading:true,
                     coins : res
                 });
@@ -30,44 +24,29 @@ export default class Searchbar extends Component
     }
 
     handleChange = (e) => {
-        
         this.setState({
-        
             [e.target.name]: e.target.value
         });
     }
 
     handleSubmit = (e) => {
-        
         e.preventDefault();
-        
         let obj = this.state.coins.data.filter(coin => {
-        
             return coin.name === this.state.currency;
-        
         });
 
-        
-        if(obj[0])
-        {
-        
-            axios.get(`https://api.coingecko.com/api/v3/coins/${obj[0].id}`)
-                .then(res => {
-                    this.setState({
+        if(obj[0]){
+        axios.get(`https://api.coingecko.com/api/v3/coins/${obj[0].id}`)
+            .then(res => {
+                this.setState({
                     searchedCoin: res,
                     showData: true
                 })
             }).catch((err) => {
-
                 console.log(`An error has been occurred`);
-            
             });
 
-
-        }
-        
-        else
-        {
+        }else{
             this.setState({
                 searchedCoin : "",
                 showData : false
@@ -77,9 +56,8 @@ export default class Searchbar extends Component
         console.log('Submit fired');
             }
 
-    render() 
-    {
-      return(
+    render() {
+      return (
           <div>
               {!this.state.loading ? (
                   <Loading />
@@ -100,8 +78,8 @@ export default class Searchbar extends Component
                 )
               }
             </div>
-            );
+      );
       
       
+      }
     }
-}
